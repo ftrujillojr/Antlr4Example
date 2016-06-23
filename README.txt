@@ -97,9 +97,9 @@ Clean and Build
 
 Run
 
-$ java -jar ./target/Antler4Example.jar
-hello francis
-(r hello francis)
+$ java -jar ./target/Antler4Example.jar --file hello.txt
+hello world
+(r hello world)
 
 
 
@@ -128,3 +128,7 @@ http://stackoverflow.com/questions/29060496/allow-whitespace-sections-antlr4/291
             ((MultiChannelTokenStream) _input).disable(HIDDEN);
         }
     }
+
+http://www.theendian.com/blog/antlr-4-lexer-parser-and-listener-with-example-grammar/
+
+

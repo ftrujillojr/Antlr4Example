@@ -15,7 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -27,6 +27,7 @@ import org.apache.commons.cli.ParseException;
 
 import org.fjt.grammar.HelloLexer;
 import org.fjt.grammar.HelloParser;
+import org.fjt.grammar.HelloParser.RContext;
 
 
 /*
@@ -78,11 +79,18 @@ public class Main {
             }
 
             String fileName = (String) cliMap.get("file");
-            System.out.println("Parsing file => " + fileName);
-            
-            if(fileName.equals("hello.txt")) {
-                Main.helloExample(fileName);
-            }
+            Integer debug = (Integer) cliMap.get("debug");
+            HelloExample helloExample = new HelloExample();
+
+            if (fileName.isEmpty()) {
+                helloExample.readStdin();
+            } else if (fileName.equals("hello.txt")) {
+                if (debug == 0) {
+                    helloExample.parseFile(fileName);
+                } else {
+                    helloExample.showTokens(fileName);
+                }
+            } 
 
             System.exit(0);
 
@@ -95,26 +103,6 @@ public class Main {
         } catch (MainException ex) {
             System.out.println(ex.getMessage());
             System.exit(12);
-        }
-    }
-
-    public static void helloExample(String fileName) throws IOException {
-        try (InputStream inputStream = new FileInputStream(fileName)) {
-            // Your code here.
-            // create a CharStream that reads from standard input
-            ANTLRInputStream input = new ANTLRInputStream(inputStream);
-
-            // create a lexer that feeds off of input CharStream
-            HelloLexer lexer = new HelloLexer(input);
-
-            // create a buffer of tokens pulled from the lexer
-            CommonTokenStream tokens = new CommonTokenStream(lexer);
-
-            // create a parser that feeds off the tokens buffer
-            HelloParser helloParser = new HelloParser(tokens);
-
-            ParseTree tree = helloParser.r(); // begin parsing at r() rule
-            System.out.println(tree.toStringTree(helloParser)); // print LISP-style tree  
         }
     }
 
@@ -131,7 +119,7 @@ public class Main {
 
         optionList.add(Option.builder()
                 .longOpt("file")
-                .required(true)
+                .required(false)
                 .hasArg(true)
                 .argName("FILENAME")
                 .desc("An input file to parse.")
