@@ -97,7 +97,7 @@ Clean and Build
 
 Run
 
-$ java -jar ./target/ParseTTE.jar
+$ java -jar ./target/Antler4Example.jar
 hello francis
 (r hello francis)
 
@@ -110,3 +110,21 @@ If you want command line tools, then do this in .cshrc or equivilant shell.
     alias antlr4 'java -Xmx500M -cp "$HOME/.m2/repository/org/antlr/antlr4/4.5.3/antlr4-4.5.3.jar:$CLASSPATH" org.antlr.v4.Tool'
     alias grun 'java -cp "$HOME/.m2/repository/org/antlr/antlr4/4.5.3/antlr4-4.5.3.jar:$CLASSPATH" org.antlr.v4.runtime.misc.TestRig'
 
+
+
+http://stackoverflow.com/questions/29060496/allow-whitespace-sections-antlr4/29115489#29115489
+
+    templateBody : {enableWs();} templateChunk* {disableWs();};
+
+
+    public void enableWs() {
+        if (_input instanceof MultiChannelTokenStream) {
+            ((MultiChannelTokenStream) _input).enable(HIDDEN);
+        }
+    }
+
+    public void disableWs() {
+        if (_input instanceof MultiChannelTokenStream) {
+            ((MultiChannelTokenStream) _input).disable(HIDDEN);
+        }
+    }
