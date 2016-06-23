@@ -81,14 +81,21 @@ public class Main {
             String fileName = (String) cliMap.get("file");
             Integer debug = (Integer) cliMap.get("debug");
             HelloExample helloExample = new HelloExample();
+            TTEExample tteExample = new TTEExample();
 
             if (fileName.isEmpty()) {
-                helloExample.readStdin();
+//                helloExample.readStdin();
             } else if (fileName.equals("hello.txt")) {
                 if (debug == 0) {
                     helloExample.parseFile(fileName);
                 } else {
                     helloExample.showTokens(fileName);
+                }
+            } else if (fileName.equals("tte.txt")) {
+                if (debug == 0) {
+                    tteExample.parseFile(fileName);
+                } else {
+                    tteExample.showTokens(fileName);
                 }
             } 
 
