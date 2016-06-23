@@ -1,6 +1,8 @@
 package org.fjt;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -26,6 +28,7 @@ import org.apache.commons.cli.ParseException;
 import org.fjt.grammar.HelloLexer;
 import org.fjt.grammar.HelloParser;
 
+
 /*
  * SVN information
  * $Revision: 3687 $
@@ -48,6 +51,9 @@ public class Main {
      * http://www.javaworld.com/article/2072482/command-line-parsing-with-apache-commons-cli.html
      *
      * https://commons.apache.org/proper/commons-cli/javadocs/api-release/org/apache/commons/cli/package-tree.html
+     *
+     * @param args
+     * @throws java.io.IOException
      */
     public static void main(String[] args) throws IOException {
 
@@ -71,21 +77,12 @@ public class Main {
                 displayUsageAndExit(-1);
             }
 
-            // Your code here.
-            // create a CharStream that reads from standard input
-            ANTLRInputStream input = new ANTLRInputStream(System.in);
-
-            // create a lexer that feeds off of input CharStream
-            HelloLexer lexer = new HelloLexer(input);
-
-            // create a buffer of tokens pulled from the lexer
-            CommonTokenStream tokens = new CommonTokenStream(lexer);
-
-            // create a parser that feeds off the tokens buffer
-            HelloParser helloParser = new HelloParser(tokens);
-
-            ParseTree tree = helloParser.r(); // begin parsing at r() rule
-            System.out.println(tree.toStringTree(helloParser)); // print LISP-style tree  
+            String fileName = (String) cliMap.get("file");
+            System.out.println("Parsing file => " + fileName);
+            
+            if(fileName.equals("hello.txt")) {
+                Main.helloExample(fileName);
+            }
 
             System.exit(0);
 
@@ -101,6 +98,26 @@ public class Main {
         }
     }
 
+    public static void helloExample(String fileName) throws IOException {
+        try (InputStream inputStream = new FileInputStream(fileName)) {
+            // Your code here.
+            // create a CharStream that reads from standard input
+            ANTLRInputStream input = new ANTLRInputStream(inputStream);
+
+            // create a lexer that feeds off of input CharStream
+            HelloLexer lexer = new HelloLexer(input);
+
+            // create a buffer of tokens pulled from the lexer
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+
+            // create a parser that feeds off the tokens buffer
+            HelloParser helloParser = new HelloParser(tokens);
+
+            ParseTree tree = helloParser.r(); // begin parsing at r() rule
+            System.out.println(tree.toStringTree(helloParser)); // print LISP-style tree  
+        }
+    }
+
     /**
      * This is where you will define your options.
      *
@@ -111,6 +128,15 @@ public class Main {
      */
     public static void loadUpOptions() throws MainException {
         List<Option> optionList = new ArrayList<>();
+
+        optionList.add(Option.builder()
+                .longOpt("file")
+                .required(true)
+                .hasArg(true)
+                .argName("FILENAME")
+                .desc("An input file to parse.")
+                .type(String.class)
+                .build());
 
         optionList.add(Option.builder()
                 .longOpt("debug")
