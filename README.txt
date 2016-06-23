@@ -9,20 +9,7 @@ Create a Maven controlled Java Application project.
 
         https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html
 
-        OR use my template that has Apache CLI 1.3 set up for your command line interface.
-
-        mvn archetype:generate \
-        -DarchetypeGroupId=org.fjt 
-        -DarchetypeArtifactId=simple-java-app 
-        -DarchetypeVersion=1.0 
-        -DarchetypeRepository=http://nsglnxdev1.micron.com/~ftrujillo/maven2 
-        -Darchtype.interactive=false -DgroupId=org.fjt 
-        -DartifactId=ParseTTE 
-        -Dversion=1.0 
-        -Dpackage=org.fjt 
-        --batch-mode
-
-
+        
 Place this in your pom.xml.. Make sure the VERSIONS match.
 
     <dependencies>
