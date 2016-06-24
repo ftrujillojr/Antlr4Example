@@ -16,7 +16,7 @@ public class HelloExample {
     
     public HelloExample() {
     }
-
+    
     public void readStdin() throws IOException {
         System.out.println("Reading from STDIN . . .");
         // Your code here.
@@ -64,6 +64,7 @@ public class HelloExample {
             
             // GO!
             walker.walk(listener, topContext);
+           
         }
     }
     

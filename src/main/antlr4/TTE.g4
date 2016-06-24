@@ -2,7 +2,6 @@ grammar TTE;
 
 top : 'dude';
 
-
 SECTION_BEGIN 
     : [\$][\$]'_BEGIN_' IDENTIFIER;
 
