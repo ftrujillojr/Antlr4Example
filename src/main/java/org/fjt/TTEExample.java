@@ -55,14 +55,14 @@ public class TTEExample {
             // Entry point
             TTEParser.TopContext topContext = tteParser.top();
 
-//            // Create a walker.
-//            ParseTreeWalker walker = new ParseTreeWalker();
-//            
-//            // attach our listener
-//            TTEExampleListener li/stener = new TTEExampleListener();
-//            
-//            // GO!
-//            walker.walk(listener, topContext);
+            // Create a walker.
+            ParseTreeWalker walker = new ParseTreeWalker();
+            
+            // attach our listener
+            TTEExampleListener listener = new TTEExampleListener();
+            
+            // GO!
+            walker.walk(listener, topContext);
         }
     }
 
@@ -84,7 +84,7 @@ public class TTEExample {
                 String symbolName = TTELexer.VOCABULARY.getSymbolicName(token.getType());
                 String tokenString = token.getText();
 //                if (symbolName.equals("STRING_LITERAL")) {
-                    System.out.println(symbolName + " =>" + tokenString + "<=");
+                   System.out.println(symbolName + " =>" + tokenString + "<=");
 //                }
             }
         }

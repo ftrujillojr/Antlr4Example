@@ -1,8 +1,6 @@
 package org.fjt;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -13,9 +11,6 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -25,9 +20,6 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-import org.fjt.grammar.HelloLexer;
-import org.fjt.grammar.HelloParser;
-import org.fjt.grammar.HelloParser.RContext;
 
 
 /*
@@ -92,6 +84,12 @@ public class Main {
                     helloExample.showTokens(fileName);
                 }
             } else if (fileName.equals("tte.txt")) {
+                if (debug == 0) {
+                    tteExample.parseFile(fileName);
+                } else {
+                    tteExample.showTokens(fileName);
+                }
+            } else if (fileName.equals("tte_index.txt")) {
                 if (debug == 0) {
                     tteExample.parseFile(fileName);
                 } else {

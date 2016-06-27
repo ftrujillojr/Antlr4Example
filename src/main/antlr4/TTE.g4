@@ -1,34 +1,33 @@
 grammar TTE;
 
-top : 'dude';
+import TTECommonLexer;
 
-SECTION_BEGIN 
-    : [\$][\$]'_BEGIN_' IDENTIFIER;
+top 
+    : index_line;
 
-SECTION_END 
-    : [\$][\$]'_END_' IDENTIFIER;
+/*
+    | section_begin_header
+    | section_end_header
+    | section_begin
+    | section_end;
+*/
 
-STRING_LITERAL
-    : '"' (ESC|.)*? '"';
+index_line
+    : slashlot ID+ NL;
 
-IDENTIFIER
-    : [a-zA-Z\_0-9\/\#\-\~\!\.\@\$\%\^\&\*\(\){}\[\]\|\:<>\?\+\=\;]+;
+slashlot
+    : '212345';
 
-NUMERIC 
-    : [0-9]+;
+/*
+section_begin_header
+    : DD '_BEGIN_HEADER' NEW_LINE;
 
-ALPHA
-    : [a-zA-Z\_]+;
+section_end_header
+    : DD '_END_HEADER' NEW_LINE;
 
-fragment ESC 
-    : '\\"' | '\\\\' ;
+section_begin
+    : DD '_BEGIN_' IDENTIFIER NEW_LINE;
 
-COMMA
-    : [\,]+;
-
-WS 
-    : [ \t\r\n]+;   // skip spaces, tabs, newlines
-
-NEWLINE
-    : [\n]+;
-
+section_end 
+    : DD '_END_' IDENTIFIER NEW_LINE;
+*/

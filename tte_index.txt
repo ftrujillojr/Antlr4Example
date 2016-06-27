@@ -1,0 +1,8 @@
+ DPA/GF/XF/010NB~33     N/A-E60101    12    12    12         ?? DDR3_90S_MSF_1_00 1466710065 1466695705 24 YES TFBGA HAND -CLK800 MB9221 V90B HMB1        ???    DDR3_90S_MSF_1_00
+
+$$_BEGIN_SUMMARY
+$$_BEGIN_HEADER
+   LOT: 1234567.123
+   "This is a string of data. 1,2,3,4,-==+{} kg;;'., one two three."
+$$_END_HEADER
+$$_END_SUMMARY
