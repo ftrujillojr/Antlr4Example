@@ -31,7 +31,7 @@ public class TTEExample {
         // create a parser that feeds off the tokens buffer
         TTEParser tteParser = new TTEParser(tokens);
 
-        ParseTree tree = tteParser.top(); // begin parsing at r() rule
+        ParseTree tree = tteParser.tte_doc(); // begin parsing at r() rule
         System.out.println(tree.toStringTree(tteParser)); // print LISP-style tree  
     }
 
@@ -53,7 +53,7 @@ public class TTEExample {
             TTEParser tteParser = new TTEParser(tokens);
 
             // Entry point
-            TTEParser.TopContext topContext = tteParser.top();
+            TTEParser.Tte_docContext tteDocContext = tteParser.tte_doc();
 
             // Create a walker.
             ParseTreeWalker walker = new ParseTreeWalker();
@@ -62,7 +62,7 @@ public class TTEExample {
             TTEExampleListener listener = new TTEExampleListener();
             
             // GO!
-            walker.walk(listener, topContext);
+            walker.walk(listener, tteDocContext);
         }
     }
 

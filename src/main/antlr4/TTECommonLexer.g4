@@ -3,14 +3,14 @@ lexer grammar TTECommonLexer;
 SEMICOLON
     : [\;][ \t]*;
 
-STR
-    : '"' (ESC|.)*? '"';
+LITERAL_STRING
+    : '"' (ESC|.)*? '"' [ \t]*;
 
 BEGIN_SECTION
-    : [\$][\$]'_BEGIN_';
+    : '$$_BEGIN_';
 
 END_SECTION
-    : [\$][\$]'_END_';
+    : '$$_END_';
 
 KEY_VAL
     : [A-Z]([A-Z0-9\_\/]+)?[\:][ \t]+(~[ \t\r\n]+)[ \t]*;
@@ -18,24 +18,12 @@ KEY_VAL
 SLASHLOT
     : [A-Z0-9]+[\/][A-Z0-9]+[\/][A-Z0-9]+[\/][A-Z0-9]+([\~][0-9]+)?[ \t]*;
 
-/*
-START_END_TAG
-    : [\<]ID ATTRS*[ \t]*[\/][\>][ \t]*;
-
-START_TAG
-    : [\<]ID ATTRS*[\>][ \t]*;
-
-END_TAG
-    : [\<][\/]ID ATTRS*[\>][ \t]*;
-*/
-
-
 ID
     : [a-zA-Z](~[ \t\r\n]+)?[ \t]*
     | [\-\?]+[ \t]*;
 
 ATTRS
-    : ID[\=]STR;
+    : ID[\=]LITERAL_STRING;
 
 REGISTER
     : ID AT NUMBER;
@@ -85,6 +73,4 @@ UNDERSCORE
 fragment ESC 
     : '\\"' | '\\\\' ;
 
-NULL_CHAR
-    : EOF;
 

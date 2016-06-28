@@ -2,32 +2,33 @@ grammar TTE;
 
 import TTECommonLexer;
 
-top 
-    : index_line;
+tte_doc 
+    : index_line section+ WS* NL*
+    | section+ WS* NL*;
 
-/*
-    | section_begin_header
-    | section_end_header
-    | section_begin
-    | section_end;
-*/
+section
+    : begin_section section_contents+ end_section;
+
+section_contents
+    : ( key_val | literal_string | register | define );
 
 index_line
-    : slashlot ID+ NL;
+    :  WS* SLASHLOT (ID | NUMBER)+ WS* NL+;
 
-slashlot
-    : '212345';
+begin_section
+    : WS* BEGIN_SECTION ID WS* NL+;
 
-/*
-section_begin_header
-    : DD '_BEGIN_HEADER' NEW_LINE;
+key_val
+    : WS* KEY_VAL WS* NL+;
 
-section_end_header
-    : DD '_END_HEADER' NEW_LINE;
+literal_string
+    : WS* LITERAL_STRING WS* NL+;
 
-section_begin
-    : DD '_BEGIN_' IDENTIFIER NEW_LINE;
+register
+    : WS* REGISTER WS* NL+;
 
-section_end 
-    : DD '_END_' IDENTIFIER NEW_LINE;
-*/
+define
+    : WS* DEFINE WS* NL+;
+
+end_section
+    : WS* END_SECTION ID WS* NL+;
