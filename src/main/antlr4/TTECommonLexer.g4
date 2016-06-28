@@ -7,10 +7,10 @@ LITERAL_STRING
     : '"' (ESC|.)*? '"' [ \t]*;
 
 BEGIN_SECTION
-    : '$$_BEGIN_';
+    : '$$_BEGIN_' ID;
 
 END_SECTION
-    : '$$_END_';
+    : '$$_END_' ID;
 
 KEY_VAL
     : [A-Z]([A-Z0-9\_\/]+)?[\:][ \t]+(~[ \t\r\n]+)[ \t]*;
