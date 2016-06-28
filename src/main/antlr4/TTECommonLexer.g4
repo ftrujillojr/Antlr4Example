@@ -4,23 +4,23 @@ SEMICOLON
     : [\;][ \t]*;
 
 LITERAL_STRING
-    : '"' (ESC|.)*? '"' [ \t]*;
+    : '"' (ESC|.)*? '"' WS*;
 
 BEGIN_SECTION
-    : '$$_BEGIN_' ID;
+    : '$$_BEGIN_' ID WS* NL+;
 
 END_SECTION
-    : '$$_END_' ID;
+    : '$$_END_' ID WS* NL+;
 
 KEY_VAL
-    : [A-Z]([A-Z0-9\_\/]+)?[\:][ \t]+(~[ \t\r\n]+)[ \t]*;
+    : [A-Z]([A-Z0-9\_\/]+)?[\:][ \t]+(~[ \t\r\n]+) WS*;
 
 SLASHLOT
-    : [A-Z0-9]+[\/][A-Z0-9]+[\/][A-Z0-9]+[\/][A-Z0-9]+([\~][0-9]+)?[ \t]*;
+    : [A-Z0-9]+[\/][A-Z0-9]+[\/][A-Z0-9]+[\/][A-Z0-9]+([\~][0-9]+)? WS*;
 
 ID
-    : [a-zA-Z](~[ \t\r\n]+)?[ \t]*
-    | [\-\?]+[ \t]*;
+    : [a-zA-Z](~[ \t\r\n]+)? WS*
+    | [\-\?]+ WS*;
 
 ATTRS
     : ID[\=]LITERAL_STRING;
@@ -29,34 +29,34 @@ REGISTER
     : ID AT NUMBER;
 
 NUMBER
-    : [0-9]+([\.][0-9]+)?[ \t]*;
+    : [0-9]+([\.][0-9]+)? WS*;
 
 DEFINE
     : '#define'[ \t]+(.)+?[\r\n]+;
 
 EQUALS
-    : [\=][ \t*];
+    : [\=] WS*;
 
 AT
-    : [\@][ \t]*;
+    : [\@] WS*;
 
 SPLAT
-    : [\*][ \t]*;
+    : [\*] WS*;
 
 BANG
-    : [\!][ \t]*;
+    : [\!] WS*;
 
 PERCENT
-    : [\%][ \t]*;
+    : [\%] WS*;
 
 LEFT_CURLY
-    : [\{][ \t]*;
+    : [\{] WS*;
 
 RIGHT_CURLY
-    : [\}][ \t]*;
+    : [\}] WS*;
 
 COMMA
-    : [\,][ \t]*;
+    : [\,] WS*;
 
 NL
     : [\r\n]+;
@@ -65,10 +65,10 @@ WS
     : [ \t]+;
 
 COLON
-    : [\:][ \t]*;
+    : [\:] WS*;
 
 UNDERSCORE
-    : [\_][ \t]*;
+    : [\_] WS*;
 
 fragment ESC 
     : '\\"' | '\\\\' ;

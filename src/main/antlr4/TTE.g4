@@ -9,25 +9,25 @@ section
     : begin_section section_contents* end_section;
 
 section_contents
-    : ( key_val | literal_string | register | define );
+    : ( key_val | literal_string | register | define | section) WS* NL*;
 
 index_line
-    :  WS* SLASHLOT (ID | NUMBER)+ WS* NL+;
+    :  (WS | NL)* SLASHLOT (ID | NUMBER)+ WS* NL*;
 
 begin_section
-    : WS* BEGIN_SECTION WS* NL+;
+    : (WS | NL)* BEGIN_SECTION;
 
 key_val
-    : WS* KEY_VAL WS* NL+;
+    : (WS | NL)* KEY_VAL;
 
 literal_string
-    : WS* LITERAL_STRING WS* NL+;
+    : (WS | NL)* LITERAL_STRING;
 
 register
-    : WS* REGISTER WS* NL+;
+    : (WS | NL)* REGISTER;
 
 define
-    : WS* DEFINE WS* NL+;
+    : (WS | NL)* DEFINE;
 
 end_section
-    : (WS | NL)* END_SECTION WS* NL+;
+    : (WS | NL)* END_SECTION;

@@ -9,7 +9,7 @@ import org.fjt.grammar.TTEParser;
 public class TTEExampleListener extends TTEBaseListener {
 
     private static boolean truncateWS = true;
-    private static boolean debug = false;
+    private static boolean debug = true;
 
     private void displayList(String src, List<String> list) {
         System.out.println("============= " + src + "============\n");
