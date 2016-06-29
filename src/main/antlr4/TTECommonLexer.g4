@@ -6,6 +6,7 @@ SEMICOLON
 LITERAL_STRING
     : '"' (ESC|.)*? '"' WS*;
 
+
 BEGIN_SECTION
     : '$$_BEGIN_' ID WS* NL+;
 
@@ -72,5 +73,4 @@ UNDERSCORE
 
 fragment ESC 
     : '\\"' | '\\\\' ;
-
 

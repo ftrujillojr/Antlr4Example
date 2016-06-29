@@ -2,22 +2,51 @@ package org.fjt;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.fjt.grammar.TTEBaseListener;
 import org.fjt.grammar.TTEParser;
 
+@SuppressWarnings("FieldMayBeFinal")
 public class TTEExampleListener extends TTEBaseListener {
 
     private static boolean debug = true;
-    
+    private static boolean preSet = false;
+
+    private static Stack<String> sectionStack = new Stack<>();
+    private static List<String> errorMessages = new ArrayList<>();
 
     private void displayList(String src, List<String> list) {
+        StringBuilder sb = new StringBuilder();
+
         System.out.println("============= " + src + "============\n");
         for (String str : list) {
             System.out.println("*** =>" + str + "<=");
+            sb.append(str);
         }
         System.out.println("\n=================================\n\n");
+
+        System.out.println(sb.toString());
+    }
+
+    public int getNumErrors() {
+        return errorMessages.size();
+    }
+
+    public List<String> getErrorMessages() {
+        return errorMessages;
+    }
+    
+    private List<String> getList(List<ParseTree> parseTreeList) {
+        List<String> returnList;
+
+        if (preSet) {
+            returnList = this.getUNModifiedList(parseTreeList);
+        } else {
+            returnList = this.getTrimList(parseTreeList);
+        }
+        return returnList;
     }
 
     private List<String> getUNModifiedList(List<ParseTree> parseTreeList) {
@@ -33,7 +62,7 @@ public class TTEExampleListener extends TTEBaseListener {
     }
 
     private List<String> getTrimList(List<ParseTree> parseTreeList) {
-        List<String> trimList = new ArrayList<>();
+        List<String> list = new ArrayList<>();
 
         for (ParseTree pt : parseTreeList) {
             String line = pt.getText();
@@ -42,110 +71,105 @@ public class TTEExampleListener extends TTEBaseListener {
             line = line.replaceAll("^[ \t]+", "");
             line = line.replaceAll("[\n]+", "\n");
             if (line.isEmpty() == false) {
-                trimList.add(line);
+                list.add(line);
             }
         }
-        return trimList;
+        return list;
     }
 
-    
-    @Override 
-    public void visitErrorNode(ErrorNode node) { 
-        for (int ii=0; ii < node.getChildCount(); ii++) {
-            if(debug) {
+    @Override
+    public void visitErrorNode(ErrorNode node) {
+        for (int ii = 0; ii < node.getChildCount(); ii++) {
+            if (debug) {
                 System.out.println("ERROR =>" + node.getChild(ii) + "<=");
             }
         }
     }
-    
+
     @Override
     public void enterDefine(TTEParser.DefineContext ctx) {
-        List<String> trimList = getTrimList(ctx.children);
-        
+        List<String> list = getList(ctx.children);
         if (debug) {
-            this.displayList("enterKey_val", trimList);
+            this.displayList("enterKey_val", list);
         }
-        
     }
 
     @Override
     public void enterLiteral_string(TTEParser.Literal_stringContext ctx) {
-        List<String> trimList = getTrimList(ctx.children);
+        List<String> list = getList(ctx.children);
         if (debug) {
-            this.displayList("enterKey_val", trimList);
+            this.displayList("enterKey_val", list);
         }
-        StringBuilder sb = new StringBuilder();
-        for (String line : trimList) {
-            sb.append(line);
-        }
-        System.out.println(sb.toString());
     }
 
     @Override
     public void enterKey_val(TTEParser.Key_valContext ctx) {
-        List<String> trimList = getTrimList(ctx.children);
+        List<String> list = getList(ctx.children);
         if (debug) {
-            this.displayList("enterKey_val", trimList);
+            this.displayList("enterKey_val", list);
         }
-        StringBuilder sb = new StringBuilder();
-        for (int ii = 0; ii < trimList.size(); ii++) {
-            String line = trimList.get(ii);
 
-            if (ii == 0) {
-                sb.append(line);
-            } else if (ii > 0) {
-                sb.append("_").append(line);
-            }
-        }
-        // TODO: need to fix this!!!!
-
-        String output = sb.toString().replaceAll("_$", "");
-
-        System.out.println(output);
     }
 
     @Override
     public void enterBegin_section(TTEParser.Begin_sectionContext ctx) {
-        List<String> trimList = getTrimList(ctx.children);
+        List<String> list = getList(ctx.children);
         if (debug) {
-            this.displayList("enterBegin_section", trimList);
+            this.displayList("enterBegin_section", list);
+        }
+        StringBuilder sb = new StringBuilder();
+
+        for (String str : list) {
+            sb.append(str);
         }
 
-        StringBuilder sb = new StringBuilder();
-        for (String line : trimList) {
-            sb.append(line);
-        }
-        System.out.println(sb.toString());
+        sectionStack.push(sb.toString().trim());
+        //System.out.println("SECTION_STACK: " + sectionStack);
     }
 
     @Override
     public void enterEnd_section(TTEParser.End_sectionContext ctx) {
-        List<String> trimList = getTrimList(ctx.children);
+        List<String> list = getList(ctx.children);
         if (debug) {
-            this.displayList("enterEnd_section", trimList);
+            this.displayList("enterEnd_section", list);
         }
         StringBuilder sb = new StringBuilder();
-        for (String line : trimList) {
-            sb.append(line);
+
+        for (String str : list) {
+            sb.append(str);
         }
-        System.out.println(sb.toString());
+
+        String compareStr = sb.toString().trim().replaceAll("_END_", "_BEGIN_"); // for comparason
+        String expect = sectionStack.pop();
+
+        if (compareStr.equals(expect) == false) {
+            int lineNumber = ctx.start.getLine();
+            String msg = "\nERROR: END section does NOT match last BEGIN section. => " + expect + "\n";
+            msg += "ERROR: Line " + lineNumber + " " + sb.toString() + "\n";
+            errorMessages.add(msg);
+        }
+    }
+
+    @Override
+    public void exitTte_doc(TTEParser.Tte_docContext ctx) {
+        
+        if (sectionStack.size() > 0) {
+            String msg = "\nERROR: There were unclosed sections left on the stack.";
+            for (String str : sectionStack) {
+                msg += "ERROR: " + str;
+            }
+            errorMessages.add(msg);
+        }
+
     }
 
     @Override
     public void enterIndex_line(TTEParser.Index_lineContext ctx) {
-        List<String> trimList = getTrimList(ctx.children);
+        List<String> list = getList(ctx.children);
 
         if (debug) {
-            this.displayList("enterIndex_line", trimList);
+            this.displayList("enterIndex_line", list);
         }
-
-        StringBuilder sb = new StringBuilder();
-        for (String line : trimList) {
-            if (line.matches(".*[\n]$") == false) {
-                sb.append(line).append(" ");
-            }
-        }
-        System.out.println(sb.toString());
     }
 
 }

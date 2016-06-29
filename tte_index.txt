@@ -9,6 +9,10 @@ $$_BEGIN_SUMMARY
         HELLO_WORLD: yes true
         #define HELLO world one two 3 4 5
    $$_END_HEADER
-$$_END_SUMMARY  
+   $$_BEGIN_SOME_NEW_SECTION_RAW
+   This                  should not
+              have whitespace  or any
+        other character mucked                                      with.
 
-1dude
+   $$_END_SOME_NEW_SECTION_RAW
+$$_END_SUMMARY  

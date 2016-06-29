@@ -38,7 +38,7 @@ public class TTEExample {
     }
 
     public void parseFile(String fileName) throws IOException {
-        //this.showTokens(fileName);
+        this.showTokens(fileName);
 
         try (InputStream inputStream = new FileInputStream(fileName)) {
             System.out.println("Parsing file => " + fileName + "\n");
@@ -69,6 +69,15 @@ public class TTEExample {
 
             // GO!
             walker.walk(listener, tteDocContext);
+
+            // List out all errors at the end.
+            int numberErrors = listener.getNumErrors();
+            System.out.println("Num errors: " + numberErrors);
+            if (numberErrors > 0) {
+                for (String str : listener.getErrorMessages()) {
+                    System.out.println(str);
+                }
+            }
         }
     }
 
@@ -89,8 +98,9 @@ public class TTEExample {
 
                 String symbolName = TTELexer.VOCABULARY.getSymbolicName(token.getType());
                 String tokenString = token.getText();
+                int lineNumber = token.getLine();
 //                if (symbolName.equals("STRING_LITERAL")) {
-                System.out.println(symbolName + " =>" + tokenString + "<=");
+                System.out.println("Line " + lineNumber + " " + symbolName + " =>" + tokenString + "<=");
 //                }
             }
         }
