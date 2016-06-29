@@ -1,81 +1,10 @@
 package org.fjt;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 import org.antlr.v4.runtime.tree.ErrorNode;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.fjt.grammar.TTEBaseListener;
 import org.fjt.grammar.TTEParser;
 
-@SuppressWarnings("FieldMayBeFinal")
-public class TTEExampleListener extends TTEBaseListener {
-
-    private static boolean debug = true;
-    private static boolean preSet = false;
-
-    private static Stack<String> sectionStack = new Stack<>();
-    private static List<String> errorMessages = new ArrayList<>();
-
-    private void displayList(String src, List<String> list, int lineNumber) {
-        StringBuilder sb = new StringBuilder();
-
-        System.out.println("============= " + src + "============\n");
-        for (String str : list) {
-            System.out.println("***" + lineNumber + "*** =>" + str + "<=");
-            sb.append(str);
-        }
-        System.out.println("\n=================================\n\n");
-
-        System.out.println(sb.toString());
-    }
-
-    public int getNumErrors() {
-        return errorMessages.size();
-    }
-
-    public List<String> getErrorMessages() {
-        return errorMessages;
-    }
-    
-    private List<String> getList(List<ParseTree> parseTreeList) {
-        List<String> returnList;
-
-        if (preSet) {
-            returnList = this.getUNModifiedList(parseTreeList);
-        } else {
-            returnList = this.getTrimList(parseTreeList);
-        }
-        return returnList;
-    }
-
-    private List<String> getUNModifiedList(List<ParseTree> parseTreeList) {
-        List<String> modifiedList = new ArrayList<>();
-
-        for (ParseTree pt : parseTreeList) {
-            String line = pt.getText();
-            if (line.isEmpty() == false) {
-                modifiedList.add(line);
-            }
-        }
-        return modifiedList;
-    }
-
-    private List<String> getTrimList(List<ParseTree> parseTreeList) {
-        List<String> list = new ArrayList<>();
-
-        for (ParseTree pt : parseTreeList) {
-            String line = pt.getText();
-            line = line.replaceAll("[\r]+", "");
-            line = line.replaceAll("[ \t]+$", "");
-            line = line.replaceAll("^[ \t]+", "");
-            line = line.replaceAll("[\n]+", "\n");
-            if (line.isEmpty() == false) {
-                list.add(line);
-            }
-        }
-        return list;
-    }
+public class TTEExampleListener extends TTEExampleHelperListener {
 
     @Override
     public void visitErrorNode(ErrorNode node) {
@@ -126,7 +55,6 @@ public class TTEExampleListener extends TTEBaseListener {
         }
 
         sectionStack.push(sb.toString().trim());
-        //System.out.println("SECTION_STACK: " + sectionStack);
     }
 
     @Override
