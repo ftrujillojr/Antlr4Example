@@ -17,12 +17,12 @@ public class TTEExampleListener extends TTEBaseListener {
     private static Stack<String> sectionStack = new Stack<>();
     private static List<String> errorMessages = new ArrayList<>();
 
-    private void displayList(String src, List<String> list) {
+    private void displayList(String src, List<String> list, int lineNumber) {
         StringBuilder sb = new StringBuilder();
 
         System.out.println("============= " + src + "============\n");
         for (String str : list) {
-            System.out.println("*** =>" + str + "<=");
+            System.out.println("***" + lineNumber + "*** =>" + str + "<=");
             sb.append(str);
         }
         System.out.println("\n=================================\n\n");
@@ -89,8 +89,9 @@ public class TTEExampleListener extends TTEBaseListener {
     @Override
     public void enterDefine(TTEParser.DefineContext ctx) {
         List<String> list = getList(ctx.children);
+        
         if (debug) {
-            this.displayList("enterKey_val", list);
+            this.displayList("enterKey_val", list, ctx.start.getLine());
         }
     }
 
@@ -98,7 +99,7 @@ public class TTEExampleListener extends TTEBaseListener {
     public void enterLiteral_string(TTEParser.Literal_stringContext ctx) {
         List<String> list = getList(ctx.children);
         if (debug) {
-            this.displayList("enterKey_val", list);
+            this.displayList("enterKey_val", list, ctx.start.getLine());
         }
     }
 
@@ -106,7 +107,7 @@ public class TTEExampleListener extends TTEBaseListener {
     public void enterKey_val(TTEParser.Key_valContext ctx) {
         List<String> list = getList(ctx.children);
         if (debug) {
-            this.displayList("enterKey_val", list);
+            this.displayList("enterKey_val", list, ctx.start.getLine());
         }
 
     }
@@ -114,8 +115,9 @@ public class TTEExampleListener extends TTEBaseListener {
     @Override
     public void enterBegin_section(TTEParser.Begin_sectionContext ctx) {
         List<String> list = getList(ctx.children);
+        
         if (debug) {
-            this.displayList("enterBegin_section", list);
+            this.displayList("enterBegin_section", list, ctx.start.getLine());
         }
         StringBuilder sb = new StringBuilder();
 
@@ -130,8 +132,9 @@ public class TTEExampleListener extends TTEBaseListener {
     @Override
     public void enterEnd_section(TTEParser.End_sectionContext ctx) {
         List<String> list = getList(ctx.children);
+        
         if (debug) {
-            this.displayList("enterEnd_section", list);
+            this.displayList("enterEnd_section", list, ctx.start.getLine());
         }
         StringBuilder sb = new StringBuilder();
 
@@ -160,15 +163,14 @@ public class TTEExampleListener extends TTEBaseListener {
             }
             errorMessages.add(msg);
         }
-
     }
 
     @Override
     public void enterIndex_line(TTEParser.Index_lineContext ctx) {
-        List<String> list = getList(ctx.children);
+        List<String> list = getUNModifiedList(ctx.children);
 
         if (debug) {
-            this.displayList("enterIndex_line", list);
+            this.displayList("enterIndex_line", list, ctx.start.getLine());
         }
     }
 

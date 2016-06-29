@@ -39,9 +39,11 @@ public class TTEExample {
 
     public void parseFile(String fileName) throws IOException {
         this.showTokens(fileName);
+        
+        System.out.println("==================================================================================");
 
         try (InputStream inputStream = new FileInputStream(fileName)) {
-            System.out.println("Parsing file => " + fileName + "\n");
+            System.out.println("\nParsing file => " + fileName + "\n");
 
             // Your code here.
             // Create a CharStream that reads from standard input
