@@ -15,4 +15,9 @@ $$_BEGIN_SUMMARY
         other character mucked                                      with.
 
    $$_END_SOME_NEW_SECTION_RAW
+   $$_BEGIN_TTE_LOG
+   @ 1 12345
+   * 0 0 1234567:12:P12:12
+   $$_END_TTE_LOG
+
 $$_END_SUMMARY  

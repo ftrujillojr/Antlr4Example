@@ -6,6 +6,11 @@ SEMICOLON
 LITERAL_STRING
     : '"' (ESC|.)*? '"' WS*;
 
+BEGIN_TTE_LOG_SECTION
+    : '$$_BEGIN_TTE_LOG' WS* NL+;
+
+END_TTE_LOG_SECTION
+    : '$$_END_TTE_LOG' WS* NL+;
 
 BEGIN_SECTION
     : '$$_BEGIN_' ID WS* NL+;
@@ -34,6 +39,9 @@ NUMBER
 
 DEFINE
     : '#define'[ \t]+(.)+?[\r\n]+;
+
+FUSEID
+    : [0-9][0-9][0-9][0-9][0-9][0-9][0-9]':'[0-9][0-9]':'[NP][0-9][0-9]':'[0-9][0-9];
 
 EQUALS
     : [\=] WS*;

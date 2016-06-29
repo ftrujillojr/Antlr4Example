@@ -40,6 +40,44 @@ public class TTEExampleListener extends TTEExampleHelperListener {
         }
 
     }
+    
+    @Override public void enterBegin_tte_log_section(TTEParser.Begin_tte_log_sectionContext ctx) { 
+        List<String> list = getList(ctx.children);
+        
+        if (debug) {
+            this.displayList("enterBegin_tte_log_section", list, ctx.start.getLine());
+        }
+        StringBuilder sb = new StringBuilder();
+
+        for (String str : list) {
+            sb.append(str);
+        }
+
+        sectionStack.push(sb.toString().trim());
+    }
+    
+    @Override public void enterEnd_tte_log_section(TTEParser.End_tte_log_sectionContext ctx) {
+        List<String> list = getList(ctx.children);
+        
+        if (debug) {
+            this.displayList("enterEnd_tte_log_section", list, ctx.start.getLine());
+        }
+        StringBuilder sb = new StringBuilder();
+
+        for (String str : list) {
+            sb.append(str);
+        }
+
+        String compareStr = sb.toString().trim().replaceAll("_END_", "_BEGIN_"); // for comparason
+        String expect = sectionStack.pop();
+
+        if (compareStr.equals(expect) == false) {
+            int lineNumber = ctx.start.getLine();
+            String msg = "\nERROR: END section does NOT match last BEGIN section. => " + expect + "\n";
+            msg += "ERROR: Line " + lineNumber + " " + sb.toString() + "\n";
+            errorMessages.add(msg);
+        }
+    }
 
     @Override
     public void enterBegin_section(TTEParser.Begin_sectionContext ctx) {
