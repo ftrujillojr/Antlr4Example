@@ -30,12 +30,16 @@ public class TTEExample {
 
         // create a parser that feeds off the tokens buffer
         TTEParser tteParser = new TTEParser(tokens);
+        tteParser.removeErrorListeners();  // remove default error listener.
+        tteParser.addErrorListener(new TTEExampleErrorListener()); // add our own error listener.
 
         ParseTree tree = tteParser.tte_doc(); // begin parsing at r() rule
         System.out.println(tree.toStringTree(tteParser)); // print LISP-style tree  
     }
 
     public void parseFile(String fileName) throws IOException {
+        //this.showTokens(fileName);
+
         try (InputStream inputStream = new FileInputStream(fileName)) {
             System.out.println("Parsing file => " + fileName + "\n");
 
@@ -51,16 +55,18 @@ public class TTEExample {
 
             // Create a parser that feeds off the tokens buffer
             TTEParser tteParser = new TTEParser(tokens);
+            tteParser.removeErrorListeners();  // remove default error listener.
+            tteParser.addErrorListener(new TTEExampleErrorListener()); // add our own error listener.
 
             // Entry point
             TTEParser.Tte_docContext tteDocContext = tteParser.tte_doc();
 
             // Create a walker.
             ParseTreeWalker walker = new ParseTreeWalker();
-            
+
             // attach our listener
             TTEExampleListener listener = new TTEExampleListener();
-            
+
             // GO!
             walker.walk(listener, tteDocContext);
         }
@@ -84,7 +90,7 @@ public class TTEExample {
                 String symbolName = TTELexer.VOCABULARY.getSymbolicName(token.getType());
                 String tokenString = token.getText();
 //                if (symbolName.equals("STRING_LITERAL")) {
-                   System.out.println(symbolName + " =>" + tokenString + "<=");
+                System.out.println(symbolName + " =>" + tokenString + "<=");
 //                }
             }
         }
