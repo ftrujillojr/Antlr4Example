@@ -1,8 +1,5 @@
 lexer grammar TTECommonLexer;
 
-SEMICOLON
-    : [\;][ \t]*;
-
 LITERAL_STRING
     : '"' (ESC|.)*? '"' WS*;
 
@@ -17,6 +14,9 @@ BEGIN_SECTION
 
 END_SECTION
     : '$$_END_' ID WS* NL+;
+
+SEMICOLON
+    : [\;][ \t]*;
 
 KEY_VAL
     : [A-Z]([A-Z0-9\_\/]+)?[\:]([ \t]*~[ \t\r\n]+)+ WS*;
