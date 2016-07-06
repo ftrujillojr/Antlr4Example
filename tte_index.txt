@@ -9,12 +9,12 @@ $$_BEGIN_SUMMARY
         HELLO_WORLD: yes true
         #define HELLO world one two 3 4 5
    $$_END_HEADER
-   $$_BEGIN_SOME_NEW_SECTION_RAW
+   $$_BEGIN_SOME_NEW_SECTION_IGNORE_WS
    This                  should not
               have whitespace  or any
         other character mucked                                      with.
-
-   $$_END_SOME_NEW_SECTION_RAW
+   
+   $$_END_SOME_NEW_SECTION_IGNORE_WS
    $$_BEGIN_TTE_LOG
    @ 1 12345
    * 0 0 1234567:12:P12:12
