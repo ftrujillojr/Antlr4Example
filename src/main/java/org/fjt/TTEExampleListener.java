@@ -74,7 +74,7 @@ public class TTEExampleListener extends TTEExampleHelperListener {
         if (compareStr.equals(expect) == false) {
             int lineNumber = ctx.start.getLine();
             String msg = "\nERROR: END section does NOT match last BEGIN section. => " + expect + "\n";
-            msg += "ERROR: Line " + lineNumber + " " + sb.toString() + "\n";
+            msg += "\nERROR: Line " + lineNumber + " " + sb.toString() + "\n";
             errorMessages.add(msg);
         }
     }
@@ -114,7 +114,7 @@ public class TTEExampleListener extends TTEExampleHelperListener {
         if (compareStr.equals(expect) == false) {
             int lineNumber = ctx.start.getLine();
             String msg = "\nERROR: END section does NOT match last BEGIN section. => " + expect + "\n";
-            msg += "ERROR: Line " + lineNumber + " " + sb.toString() + "\n";
+            msg += "\nERROR: Line " + lineNumber + " " + sb.toString() + "\n";
             errorMessages.add(msg);
         }
     }
@@ -125,7 +125,7 @@ public class TTEExampleListener extends TTEExampleHelperListener {
         if (sectionStack.size() > 0) {
             String msg = "\nERROR: There were unclosed sections left on the stack.";
             for (String str : sectionStack) {
-                msg += "ERROR: " + str;
+                msg += "\nERROR: " + str;
             }
             errorMessages.add(msg);
         }
