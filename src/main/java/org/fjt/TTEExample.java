@@ -1,9 +1,8 @@
 package org.fjt;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -20,10 +19,10 @@ public class TTEExample {
         System.out.println("Reading from STDIN . . .");
         // Your code here.
         // create a CharStream that reads from standard input
-        ANTLRInputStream input = new ANTLRInputStream(System.in);
+        CharStream inputStream = CharStreams.fromStream(System.in);
 
         // create a lexer that feeds off of input CharStream
-        TTELexer lexer = new TTELexer(input);
+        TTELexer lexer = new TTELexer(inputStream);
 
         // create a buffer of tokens pulled from the lexer
         CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -39,72 +38,68 @@ public class TTEExample {
 
     public void parseFile(String fileName) throws IOException {
         this.showTokens(fileName);
-        
+
         System.out.println("==================================================================================");
 
-        try (InputStream inputStream = new FileInputStream(fileName)) {
-            System.out.println("\nParsing file => " + fileName + "\n");
+        System.out.println("\nParsing file => " + fileName + "\n");
 
-            // Your code here.
-            // Create a CharStream that reads from standard input
-            ANTLRInputStream input = new ANTLRInputStream(inputStream);
+        // Your code here.
+        // Create a CharStream that reads from standard input
+        CharStream inputStream = CharStreams.fromFileName(fileName);
 
-            // Create a lexer that feeds off of input CharStream
-            TTELexer lexer = new TTELexer(input);
+        // Create a lexer that feeds off of input CharStream
+        TTELexer lexer = new TTELexer(inputStream);
 
-            // Create a buffer of tokens pulled from the lexer
-            CommonTokenStream tokens = new CommonTokenStream(lexer);
+        // Create a buffer of tokens pulled from the lexer
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
 
-            // Create a parser that feeds off the tokens buffer
-            TTEParser tteParser = new TTEParser(tokens);
-            tteParser.removeErrorListeners();  // remove default error listener.
-            tteParser.addErrorListener(new TTEExampleErrorListener()); // add our own error listener.
+        // Create a parser that feeds off the tokens buffer
+        TTEParser tteParser = new TTEParser(tokens);
+        tteParser.removeErrorListeners();  // remove default error listener.
+        tteParser.addErrorListener(new TTEExampleErrorListener()); // add our own error listener.
 
-            // Entry point
-            TTEParser.Tte_docContext tteDocContext = tteParser.tte_doc();
+        // Entry point
+        TTEParser.Tte_docContext tteDocContext = tteParser.tte_doc();
 
-            // Create a walker.
-            ParseTreeWalker walker = new ParseTreeWalker();
+        // Create a walker.
+        ParseTreeWalker walker = new ParseTreeWalker();
 
-            // attach our listener
-            TTEExampleListener listener = new TTEExampleListener();
+        // attach our listener
+        TTEExampleListener listener = new TTEExampleListener();
 
-            // GO!
-            walker.walk(listener, tteDocContext);
+        // GO!
+        walker.walk(listener, tteDocContext);
 
-            // List out all errors at the end.
-            int numberErrors = listener.getNumErrors();
-            System.out.println("Num errors: " + numberErrors);
-            if (numberErrors > 0) {
-                for (String str : listener.getErrorMessages()) {
-                    System.out.println(str);
-                }
+        // List out all errors at the end.
+        int numberErrors = listener.getNumErrors();
+        System.out.println("Num errors: " + numberErrors);
+        if (numberErrors > 0) {
+            for (String str : listener.getErrorMessages()) {
+                System.out.println(str);
             }
         }
     }
 
     public void showTokens(String fileName) throws IOException {
-        try (InputStream inputStream = new FileInputStream(fileName)) {
-            System.out.println("Parsing TOKENS from file => " + fileName + "\n");
+        System.out.println("Parsing TOKENS from file => " + fileName + "\n");
 
-            // Your code here.
-            // Create a CharStream that reads from standard input
-            ANTLRInputStream input = new ANTLRInputStream(inputStream);
+        // Your code here.
+        // Create a CharStream that reads from standard input
+        CharStream inputStream = CharStreams.fromFileName(fileName);
 
-            // Create a lexer that feeds off of input CharStream
-            TTELexer lexer = new TTELexer(input);
+        // Create a lexer that feeds off of input CharStream
+        TTELexer lexer = new TTELexer(inputStream);
 
-            for (Token token = lexer.nextToken();
-                    token.getType() != Token.EOF;
-                    token = lexer.nextToken()) {
+        for (Token token = lexer.nextToken();
+                token.getType() != Token.EOF;
+                token = lexer.nextToken()) {
 
-                String symbolName = TTELexer.VOCABULARY.getSymbolicName(token.getType());
-                String tokenString = token.getText();
-                int lineNumber = token.getLine();
+            String symbolName = TTELexer.VOCABULARY.getSymbolicName(token.getType());
+            String tokenString = token.getText();
+            int lineNumber = token.getLine();
 //                if (symbolName.equals("STRING_LITERAL")) {
-                System.out.println("Line " + lineNumber + " " + symbolName + " =>" + tokenString + "<=");
+            System.out.println("Line " + lineNumber + " " + symbolName + " =>" + tokenString + "<=");
 //                }
-            }
         }
     }
 

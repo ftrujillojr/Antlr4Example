@@ -20,8 +20,6 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-
-
 /*
  * SVN information
  * $Revision: 3687 $
@@ -74,6 +72,7 @@ public class Main {
             Integer debug = (Integer) cliMap.get("debug");
             HelloExample helloExample = new HelloExample();
             TTEExample tteExample = new TTEExample();
+            Odata odata = new Odata();
 
             if (fileName.isEmpty()) {
 //                helloExample.readStdin();
@@ -95,7 +94,9 @@ public class Main {
                 } else {
                     tteExample.showTokens(fileName);
                 }
-            } 
+            } else if (fileName.equals("odata.txt")) {
+                odata.parseFile(fileName);
+            }
 
             System.exit(0);
 
