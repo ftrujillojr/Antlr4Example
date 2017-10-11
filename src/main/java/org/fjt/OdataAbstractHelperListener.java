@@ -20,8 +20,8 @@ import org.fjt.grammar.OdataBaseListener;
  * 
  */
 public abstract class OdataAbstractHelperListener extends OdataBaseListener {
-    protected static boolean debug = true; // set this to false for production.
-    protected static boolean preSet = true;
+    protected static boolean debug = false; // set this to false for production.
+    protected static boolean preSet = false;
 
     protected static Stack<String> sectionStack = new Stack<>();
     protected static List<String> errorMessages = new ArrayList<>();
@@ -36,7 +36,7 @@ public abstract class OdataAbstractHelperListener extends OdataBaseListener {
         }
         System.out.println("\n=================================\n\n");
 
-        System.out.println(sb.toString());
+        //System.out.println(sb.toString());
     }
 
     public int getNumErrors() {

@@ -1,1 +1,1 @@
-firstName eq 'Francis' or firstName like 'S%'
+firstName EQ 'Francis' OR firstName LIKE 'S%' OR lastName NE 'Casper' AND email EQ 'me@me.org' OR numDays eq 1 AND isAdmin eq FALSE

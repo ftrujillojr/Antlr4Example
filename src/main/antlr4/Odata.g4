@@ -1,31 +1,44 @@
 grammar Odata;
 
 filterTop
-    : filterStatement
-    | filterStatement LOGICAL_OPERATOR filterStatement;
+    : (filterStatement)+ EOF                                            
+    ;
 
-filterStatement: TEXT RELATIONAL_OPERATOR (STRING_LITERAL | TEXT | BOOLEAN_VALUE);
+filterStatement
+    : TEXT RELATIONAL_OPERATOR (STRING_LITERAL | TEXT | BOOLEAN_VALUE)  
+    | filterStatement LOGICAL_OPERATOR filterStatement                  
+    ;
 
 LOGICAL_OPERATOR
-    : 'and' | 'or' | 'not'
-    | 'AND' | 'OR' | 'NOT';
+    : 'or' | 'and'
+    | 'OR' | 'AND'
+    ;
 
 RELATIONAL_OPERATOR
     : 'eq' | 'lt' | 'gt' | 'ne' | 'ge' | 'le' | 'like'
-    | 'EQ' | 'LT' | 'GT' | 'NE' | 'GE' | 'LE' | 'LIKE';
+    | 'EQ' | 'LT' | 'GT' | 'NE' | 'GE' | 'LE' | 'LIKE'
+    ;
 
 BOOLEAN_VALUE
-    : 'true' | 'false';
+    : 'true' | 'false'
+    | 'TRUE' | 'FALSE'
+    ;
 
 STRING_LITERAL
     : '\'' ( ESC_SEQ | ~('\\'|'\'') )* '\''
-    |'"' ( ESC_SEQ | ~('\\'|'"') )* '"';
+    |'"' ( ESC_SEQ | ~('\\'|'"') )* '"'
+    ;
 
 TEXT
-    : ([a-zA-Z0-9_]+);
+    : ([a-zA-Z0-9_]+)
+    ;
  
-WHITESPACE
-    : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+ -> skip;
+WS
+    : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+ 
+    ;
 
 fragment ESC_SEQ 
-    : '\\"' | '\\\\' | EOF;
+    : '\\"' | '\\\\' | EOF
+    ;
+
+ANY : . ;

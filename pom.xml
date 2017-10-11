@@ -69,6 +69,8 @@
                 <artifactId>antlr4-maven-plugin</artifactId>
                 <version>4.5.3</version>
                 <configuration>
+                    <listener>true</listener>
+                    <visitor>true</visitor>
                     <arguments>
                         <argument>-package</argument>
                         <argument>org.fjt.grammar</argument>
